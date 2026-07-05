@@ -2,15 +2,9 @@ name: Protos
 
 on:
   pull_request:
-    paths:
-      - ".github/workflows/protos.yml"
-      - "protos/**"
   push:
     branches:
       - main
-    paths:
-      - ".github/workflows/protos.yml"
-      - "protos/**"
 
 permissions:
   contents: read
