@@ -9,7 +9,7 @@ Unsupported endpoints are intentionally omitted.
 - The only supported role is `SEARCHER = 1`.
 - The mempool subscription RPC is only available to whitelisted searchers.
 
-# Development
+## Development
 
 Generated bindings are checked in under `src/generated`. After editing
 `protos/*.proto`, regenerate them with:
