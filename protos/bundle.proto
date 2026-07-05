@@ -5,7 +5,11 @@ import "shared.proto";
 
 package bundle;
 
+// A bundle is a sequence of transactions that executes all or nothing.
 message Bundle {
   shared.Header header = 2;
   repeated packet.Packet packets = 3;
+  // Indices into packets for transactions that may be dropped from the bundle.
+  // Every index must refer to an existing packet, or the bundle will be rejected.
+  repeated uint32 dropping_indices = 4;
 }
