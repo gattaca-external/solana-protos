@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package preconf;
+
+message PreconfSubscription {
+}
+
+message Preconf {
+  uint64 slot = 1;
+  uint32 index_in_slot = 2;
+  bool is_last = 3;
+  uint32 start_index = 7;
+  uint32 end_index = 8;
+  repeated bytes transactions = 9;
+}
+
+service PreconfService {
+  rpc SubscribePreconfs(PreconfSubscription) returns (stream Preconf) {}
+}
