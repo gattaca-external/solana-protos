@@ -19,3 +19,7 @@ pub mod bundle {
 pub mod searcher {
     include!("generated/searcher.rs");
 }
+
+pub mod preconf {
+    include!("generated/preconf.rs");
+}
