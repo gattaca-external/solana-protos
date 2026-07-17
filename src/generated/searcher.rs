@@ -355,6 +355,32 @@ pub mod searcher_service_client {
                 .insert(GrpcMethod::new("searcher.SearcherService", "SubscribeMempool"));
             self.inner.server_streaming(req, path, codec).await
         }
+        pub async fn subscribe_preconfs(
+            &mut self,
+            request: impl tonic::IntoRequest<super::super::preconf::PreconfSubscription>,
+        ) -> std::result::Result<
+            tonic::Response<tonic::codec::Streaming<super::super::preconf::Preconf>>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/searcher.SearcherService/SubscribePreconfs",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("searcher.SearcherService", "SubscribePreconfs"),
+                );
+            self.inner.server_streaming(req, path, codec).await
+        }
     }
 }
 /// Generated server implementations.
@@ -423,6 +449,19 @@ pub mod searcher_service_server {
             request: tonic::Request<super::MempoolSubscription>,
         ) -> std::result::Result<
             tonic::Response<Self::SubscribeMempoolStream>,
+            tonic::Status,
+        >;
+        /// Server streaming response type for the SubscribePreconfs method.
+        type SubscribePreconfsStream: tonic::codegen::tokio_stream::Stream<
+                Item = std::result::Result<super::super::preconf::Preconf, tonic::Status>,
+            >
+            + std::marker::Send
+            + 'static;
+        async fn subscribe_preconfs(
+            &self,
+            request: tonic::Request<super::super::preconf::PreconfSubscription>,
+        ) -> std::result::Result<
+            tonic::Response<Self::SubscribePreconfsStream>,
             tonic::Status,
         >;
     }
@@ -818,6 +857,56 @@ pub mod searcher_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = SubscribeMempoolSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.server_streaming(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/searcher.SearcherService/SubscribePreconfs" => {
+                    #[allow(non_camel_case_types)]
+                    struct SubscribePreconfsSvc<T: SearcherService>(pub Arc<T>);
+                    impl<
+                        T: SearcherService,
+                    > tonic::server::ServerStreamingService<
+                        super::super::preconf::PreconfSubscription,
+                    > for SubscribePreconfsSvc<T> {
+                        type Response = super::super::preconf::Preconf;
+                        type ResponseStream = T::SubscribePreconfsStream;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::ResponseStream>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<
+                                super::super::preconf::PreconfSubscription,
+                            >,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as SearcherService>::subscribe_preconfs(&inner, request)
+                                    .await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = SubscribePreconfsSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
