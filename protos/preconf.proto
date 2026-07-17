@@ -13,7 +13,3 @@ message Preconf {
   uint32 end_index = 8;
   repeated bytes transactions = 9;
 }
-
-service PreconfService {
-  rpc SubscribePreconfs(PreconfSubscription) returns (stream Preconf) {}
-}

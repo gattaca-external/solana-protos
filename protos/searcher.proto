@@ -4,6 +4,7 @@ package searcher;
 
 import "bundle.proto";
 import "packet.proto";
+import "preconf.proto";
 import "google/protobuf/timestamp.proto";
 
 message SlotList {
@@ -80,4 +81,5 @@ service SearcherService {
   rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
   rpc GetRegions (GetRegionsRequest) returns (GetRegionsResponse) {}
   rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}
+  rpc SubscribePreconfs (preconf.PreconfSubscription) returns (stream preconf.Preconf) {}
 }
