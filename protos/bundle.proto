@@ -12,4 +12,6 @@ message Bundle {
   // Indices into packets for transactions that may be dropped from the bundle.
   // Every index must refer to an existing packet, or the bundle will be rejected.
   repeated uint32 dropping_indices = 4;
+  // If set, the bundle may only land in this slot.
+  optional uint64 slot = 5;
 }
