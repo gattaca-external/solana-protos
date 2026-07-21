@@ -10,4 +10,7 @@ pub struct Bundle {
     /// Every index must refer to an existing packet, or the bundle will be rejected.
     #[prost(uint32, repeated, tag = "4")]
     pub dropping_indices: ::prost::alloc::vec::Vec<u32>,
+    /// If set, the bundle may only land in this slot.
+    #[prost(uint64, optional, tag = "5")]
+    pub slot: ::core::option::Option<u64>,
 }
