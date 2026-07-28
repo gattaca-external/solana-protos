@@ -5,14 +5,6 @@ pub struct PreconfSubscription {}
 pub struct Preconf {
     #[prost(uint64, tag = "1")]
     pub slot: u64,
-    #[prost(uint32, tag = "2")]
-    pub index_in_slot: u32,
-    #[prost(bool, tag = "3")]
-    pub is_last: bool,
-    #[prost(uint32, tag = "7")]
-    pub start_index: u32,
-    #[prost(uint32, tag = "8")]
-    pub end_index: u32,
     #[prost(bytes = "vec", repeated, tag = "9")]
     pub transactions: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
