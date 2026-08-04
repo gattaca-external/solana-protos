@@ -14,4 +14,8 @@ message Bundle {
   repeated uint32 dropping_indices = 4;
   // If set, the bundle may only land in this slot.
   optional uint64 slot = 5;
+  // Accounts that this bundle is targeting. Each account must be 32 bytes, max
+  // 16 accounts can be specified. The builder will consider the bundle after
+  // transactions that write to these accounts.
+  repeated bytes target_accounts = 6;
 }

@@ -13,4 +13,9 @@ pub struct Bundle {
     /// If set, the bundle may only land in this slot.
     #[prost(uint64, optional, tag = "5")]
     pub slot: ::core::option::Option<u64>,
+    /// Accounts that this bundle is targeting. Each account must be 32 bytes, max
+    /// 16 accounts can be specified. The builder will consider the bundle after
+    /// transactions that write to these accounts.
+    #[prost(bytes = "vec", repeated, tag = "6")]
+    pub target_accounts: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
 }
