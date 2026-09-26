@@ -18,4 +18,7 @@ pub struct Bundle {
     /// transactions that write to these accounts.
     #[prost(bytes = "vec", repeated, tag = "6")]
     pub target_accounts: ::prost::alloc::vec::Vec<::prost::alloc::vec::Vec<u8>>,
+    /// 32 byte ID this bundle is targeting.
+    #[prost(bytes = "vec", optional, tag = "7")]
+    pub target_bundle_id: ::core::option::Option<::prost::alloc::vec::Vec<u8>>,
 }
