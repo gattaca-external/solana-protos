@@ -12,7 +12,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 "protos/shared.proto",
                 "protos/bundle.proto",
                 "protos/searcher.proto",
-                "protos/preconf.proto",
             ],
             &["protos"],
         )?;
