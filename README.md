@@ -7,7 +7,6 @@ Unsupported endpoints are intentionally omitted.
 
 - Reach out to get your key whitelisted.
 - The only supported role is `SEARCHER = 1`.
-- The mempool subscription RPC is only available to whitelisted searchers.
 
 ## Development
 
