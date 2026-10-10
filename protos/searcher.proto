@@ -4,7 +4,6 @@ package searcher;
 
 import "bundle.proto";
 import "packet.proto";
-import "google/protobuf/timestamp.proto";
 
 message SlotList {
   repeated uint64 slots = 1;
@@ -51,27 +50,6 @@ message GetRegionsResponse {
   repeated string available_regions = 2;
 }
 
-message ProgramSubscriptionV0 {
-  repeated string programs = 1;
-}
-
-message MempoolSubscription {
-  oneof msg {
-    ProgramSubscriptionV0 program_v0_sub = 1;
-  }
-
-  reserved 2;
-  reserved "wla_v0_sub";
-
-  repeated string regions = 10;
-}
-
-message PendingTxNotification {
-  google.protobuf.Timestamp server_side_ts = 1;
-  google.protobuf.Timestamp expiration_time = 2;
-  repeated packet.Packet transactions = 3;
-}
-
 service SearcherService {
   rpc SendBundle (SendBundleRequest) returns (SendBundleResponse) {}
   rpc SendTransaction (SendTransactionRequest) returns (SendTransactionResponse) {}
@@ -79,5 +57,4 @@ service SearcherService {
   rpc GetConnectedLeadersRegioned (ConnectedLeadersRegionedRequest) returns (ConnectedLeadersRegionedResponse) {}
   rpc GetTipAccounts (GetTipAccountsRequest) returns (GetTipAccountsResponse) {}
   rpc GetRegions (GetRegionsRequest) returns (GetRegionsResponse) {}
-  rpc SubscribeMempool (MempoolSubscription) returns (stream PendingTxNotification) {}
 }

@@ -60,35 +60,6 @@ pub struct GetRegionsResponse {
     #[prost(string, repeated, tag = "2")]
     pub available_regions: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
 }
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct ProgramSubscriptionV0 {
-    #[prost(string, repeated, tag = "1")]
-    pub programs: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-}
-#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
-pub struct MempoolSubscription {
-    #[prost(string, repeated, tag = "10")]
-    pub regions: ::prost::alloc::vec::Vec<::prost::alloc::string::String>,
-    #[prost(oneof = "mempool_subscription::Msg", tags = "1")]
-    pub msg: ::core::option::Option<mempool_subscription::Msg>,
-}
-/// Nested message and enum types in `MempoolSubscription`.
-pub mod mempool_subscription {
-    #[derive(Clone, PartialEq, Eq, Hash, ::prost::Oneof)]
-    pub enum Msg {
-        #[prost(message, tag = "1")]
-        ProgramV0Sub(super::ProgramSubscriptionV0),
-    }
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct PendingTxNotification {
-    #[prost(message, optional, tag = "1")]
-    pub server_side_ts: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "2")]
-    pub expiration_time: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, repeated, tag = "3")]
-    pub transactions: ::prost::alloc::vec::Vec<super::packet::Packet>,
-}
 /// Generated client implementations.
 pub mod searcher_service_client {
     #![allow(
@@ -331,30 +302,6 @@ pub mod searcher_service_client {
                 .insert(GrpcMethod::new("searcher.SearcherService", "GetRegions"));
             self.inner.unary(req, path, codec).await
         }
-        pub async fn subscribe_mempool(
-            &mut self,
-            request: impl tonic::IntoRequest<super::MempoolSubscription>,
-        ) -> std::result::Result<
-            tonic::Response<tonic::codec::Streaming<super::PendingTxNotification>>,
-            tonic::Status,
-        > {
-            self.inner
-                .ready()
-                .await
-                .map_err(|e| {
-                    tonic::Status::unknown(
-                        format!("Service was not ready: {}", e.into()),
-                    )
-                })?;
-            let codec = tonic_prost::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/searcher.SearcherService/SubscribeMempool",
-            );
-            let mut req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new("searcher.SearcherService", "SubscribeMempool"));
-            self.inner.server_streaming(req, path, codec).await
-        }
     }
 }
 /// Generated server implementations.
@@ -410,19 +357,6 @@ pub mod searcher_service_server {
             request: tonic::Request<super::GetRegionsRequest>,
         ) -> std::result::Result<
             tonic::Response<super::GetRegionsResponse>,
-            tonic::Status,
-        >;
-        /// Server streaming response type for the SubscribeMempool method.
-        type SubscribeMempoolStream: tonic::codegen::tokio_stream::Stream<
-                Item = std::result::Result<super::PendingTxNotification, tonic::Status>,
-            >
-            + std::marker::Send
-            + 'static;
-        async fn subscribe_mempool(
-            &self,
-            request: tonic::Request<super::MempoolSubscription>,
-        ) -> std::result::Result<
-            tonic::Response<Self::SubscribeMempoolStream>,
             tonic::Status,
         >;
     }
@@ -782,53 +716,6 @@ pub mod searcher_service_server {
                                 max_encoding_message_size,
                             );
                         let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/searcher.SearcherService/SubscribeMempool" => {
-                    #[allow(non_camel_case_types)]
-                    struct SubscribeMempoolSvc<T: SearcherService>(pub Arc<T>);
-                    impl<
-                        T: SearcherService,
-                    > tonic::server::ServerStreamingService<super::MempoolSubscription>
-                    for SubscribeMempoolSvc<T> {
-                        type Response = super::PendingTxNotification;
-                        type ResponseStream = T::SubscribeMempoolStream;
-                        type Future = BoxFuture<
-                            tonic::Response<Self::ResponseStream>,
-                            tonic::Status,
-                        >;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::MempoolSubscription>,
-                        ) -> Self::Future {
-                            let inner = Arc::clone(&self.0);
-                            let fut = async move {
-                                <T as SearcherService>::subscribe_mempool(&inner, request)
-                                    .await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let accept_compression_encodings = self.accept_compression_encodings;
-                    let send_compression_encodings = self.send_compression_encodings;
-                    let max_decoding_message_size = self.max_decoding_message_size;
-                    let max_encoding_message_size = self.max_encoding_message_size;
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let method = SubscribeMempoolSvc(inner);
-                        let codec = tonic_prost::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec)
-                            .apply_compression_config(
-                                accept_compression_encodings,
-                                send_compression_encodings,
-                            )
-                            .apply_max_message_size_config(
-                                max_decoding_message_size,
-                                max_encoding_message_size,
-                            );
-                        let res = grpc.server_streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)
